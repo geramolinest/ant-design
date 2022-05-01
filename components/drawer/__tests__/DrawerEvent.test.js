@@ -50,7 +50,7 @@ describe('Drawer', () => {
   it('dom should be removed after close when destroyOnClose is true', () => {
     const { rerender, container } = render(getDrawer({ destroyOnClose: true }));
     rerender(getDrawer({ destroyOnClose: true, visible: false }));
-    const ev = new Event('transitionend', { bubbles: true, cancelable: true, composed: true });
+    const ev = new Event('transitionend', { bubbles: true });
     ev.propertyName = 'transform';
     fireEvent(container.querySelector('.ant-drawer-content-wrapper'), ev);
     expect(screen.queryByText(/Here is content of Drawer/)).toBeFalsy();
@@ -59,9 +59,18 @@ describe('Drawer', () => {
     const { rerender, container } = render(getDrawer());
     expect(screen.queryByText(/Here is content of Drawer/)).toBeTruthy();
     rerender(getDrawer({ visible: false }));
-    const ev = new Event('transitionend', { bubbles: true, cancelable: true, composed: true });
+    const ev = new Event('transitionend', { bubbles: true });
     ev.propertyName = 'transform';
     fireEvent(container.querySelector('.ant-drawer-content-wrapper'), ev);
     expect(screen.queryByText(/Here is content of Drawer/)).toBeFalsy();
+  });
+  it('test afterVisibleChange', async () => {
+    const afterVisibleChange = jest.fn();
+    const { rerender, container } = render(getDrawer({ afterVisibleChange, visible: true }));
+    rerender(getDrawer({ afterVisibleChange, visible: false }));
+    const ev = new Event('transitionend', { bubbles: true });
+    ev.propertyName = 'transform';
+    fireEvent(container.querySelector('.ant-drawer-content-wrapper'), ev);
+    expect(afterVisibleChange).toBeCalledTimes(1);
   });
 });
