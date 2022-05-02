@@ -62,7 +62,7 @@ describe('Drawer', () => {
     const ev = new Event('transitionend', { bubbles: true });
     ev.propertyName = 'transform';
     fireEvent(container.querySelector('.ant-drawer-content-wrapper'), ev);
-    expect(screen.queryByText(/Here is content of Drawer/)).toBeFalsy();
+    expect(screen.queryByText(/Here is content of Drawer/)).toBeTruthy();
   });
   it('test afterVisibleChange', async () => {
     const afterVisibleChange = jest.fn();
